@@ -18,6 +18,7 @@
         3. UI起動確認
     3. プログラミング
         1. MainUIController.java作成
+        2. 時刻表示テキストを変更してみる
 
 ## 1. 環境
 
@@ -429,3 +430,64 @@ $ make run
 
 3.2.3.と同じように UI が表示された場合、正常に動作しています。  
 
+
+## 3.3.2. 時刻表示テキストを変更してみる
+
+3.3.1.で作成した MainUIController の動作を確認してみます。  
+
+Controller から UI の表示を制御する場合、制御したいUIコンポーネントに ID を設定する必要があります。  
+ここでは、時刻表示テキストを Controller から変更してみます。  
+
+--
+
+まず、SceneBuilder で MainUI.fxml を開きます。  
+次に、時刻表示テキストをクリックし、画面右側の「インスペクタ/**Code**」を選択します。  
+そして **fx:id入力欄** にIDを設定します。  
+任意のIDを設定することが出来ますが、ここでは **clockText** とします。
+
+*17.png*
+
+
+以上の操作により、時刻表示テキストは ID "clockText" が設定され、 Controller から制御することが可能になりました。  
+
+---
+
+MainUIController.java をテキストエディタで開き、次のように編集してください。  
+
+```java
+import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
+import javafx.scene.text.Text;
+
+import java.net.URL;
+import java.util.ResourceBundle;
+
+public class MainUIController implements Initializable {
+
+    @FXML
+    private Text clockText;
+
+    @Override
+    public void initialize(URL location, ResourceBundle resource) {
+        clockText.setText("12:04");
+    }
+
+}
+```
+**(変更: 1, 3, 10, 11, 15行目)**  
+
+FXMLファイルに記述されたUIコンポーネントの制御のために必要なクラスを使用できるように、1、3行目に import 文が追加されています。  
+また、Text クラスの変数 clockText を10、11行目で宣言しています。  
+このように**変数名とIDを対応付ける**ことで、FXMLファイル内のUIコンポーネントを Controller から使用することが出来ます。  
+15行目では、clockText の **setTextメソッド** を用いて時刻表示テキストに表示する文字列が "12:04" となるように処理を行っています。  
+
+**initializeメソッド** は Controller の初期化時に1度だけ実行されるものです。  
+
+この状態でコンパイルし実行すると、時刻表示テキストが指定した文字列に変更されていることが確認できます。  
+
+```
+$ make compile
+$ make run
+```
+
+*18.png*
