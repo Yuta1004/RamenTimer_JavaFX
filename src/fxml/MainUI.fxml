@@ -21,22 +21,22 @@
       </Text>
       <HBox alignment="CENTER" prefHeight="70.0" spacing="30.0">
          <children>
-            <Button mnemonicParsing="false" text="+10分">
+            <Button fx:id="plus10Min" mnemonicParsing="false" text="+10分">
                <font>
                   <Font size="20.0" />
                </font>
             </Button>
-            <Button mnemonicParsing="false" text="+1分">
+            <Button fx:id="plus1Min" mnemonicParsing="false" text="+1分">
                <font>
                   <Font size="20.0" />
                </font>
             </Button>
-            <Button mnemonicParsing="false" text="+10秒">
+            <Button fx:id="minus10Sec" mnemonicParsing="false" text="+10秒">
                <font>
                   <Font size="20.0" />
                </font>
             </Button>
-            <Button mnemonicParsing="false" text="-1秒">
+            <Button fx:id="minus1Sec" mnemonicParsing="false" text="-1秒">
                <font>
                   <Font size="20.0" />
                </font>
@@ -50,7 +50,7 @@
                   <Font size="20.0" />
                </font>
             </Button>
-            <Button mnemonicParsing="false" text="ストップ">
+            <Button fx:id="stopButton" mnemonicParsing="false" text="ストップ">
                <font>
                   <Font size="20.0" />
                </font>

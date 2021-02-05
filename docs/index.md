@@ -21,6 +21,7 @@
         2. 時刻表示テキストを変更してみる
         3. ボタンクリック時の動作を実装してみる
         4. コードの整理
+        5. ID設定
 
 ## 1. 環境
 
@@ -568,3 +569,46 @@ public class MainUIController implements Initializable {
 
 }
 ```
+
+## 3.3.5. ID設定
+
+3.3.2.と3.3.3.では時刻表示テキストとスタートボタンに ID を設定しました。  
+ここでは、制御対象である全てのUIコンポーネントに ID を設定します。  
+
+以下のように ID の設定を行ってください。  
+
+- +10分: **plus10Min**
+- +1分: **plus1Min**
+- -10分: **minus10Min**
+- -1分: **minus1Min**
+- ストップボタン: **stopButton**
+
+MainUIController.java を次のように編集してください。  
+
+```java
+import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
+import javafx.scene.text.Text;
+import javafx.scene.control.Button;
+
+import java.net.URL;
+import java.util.ResourceBundle;
+
+public class MainUIController implements Initializable {
+
+    @FXML
+    private Text clockText;
+    @FXML
+    private Button plus10Min, plus1Min, minus10Min, minus1Min, startButton, stopButton;
+
+    @Override
+    public void initialize(URL location, ResourceBundle resource) {}
+
+}
+```
+**(変更: 14行目)**
+
+変更後はコンパイルと実行を行い、正常にUIが表示されることを確認してください。  
+もしエラーが発生する場合、IDの設定ミスの可能性があります。  
+
+

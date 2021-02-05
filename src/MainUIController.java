@@ -11,7 +11,7 @@ public class MainUIController implements Initializable {
     @FXML
     private Text clockText;
     @FXML
-    private Button startButton;
+    private Button plus10Min, plus1Min, minus10Min, minus1Min, startButton, stopButton;
 
     @Override
     public void initialize(URL location, ResourceBundle resource) {}
