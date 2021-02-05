@@ -23,6 +23,8 @@
         4. コードの整理
         5. ID設定
         6. Timer.javaの準備
+    4. タイマーの実装
+        1. 時刻の初期化
 
 ## 1. 環境
 
@@ -644,7 +646,7 @@ public class Timer {
     private int second = 0;
     public static final int M = 60, S = 1;
 
-    public Clock(int m, int s) {
+    public Timer(int m, int s) {
         set(m, s);
     }
 
@@ -672,3 +674,49 @@ public class Timer {
     }
 }
 ```
+
+## 3.4. タイマーの実装
+
+## 3.4.1. 時刻の初期化
+
+タイマー起動時に時刻表示を3分で初期化するようにします。  
+また、内部でタイマーとして扱うTimerクラスのインスタンス化と初期化も行います。  
+
+MainUIController.java を次のように編集してください。  
+
+```java
+import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
+import javafx.scene.text.Text;
+import javafx.scene.control.Button;
+
+import java.net.URL;
+import java.util.ResourceBundle;
+
+public class MainUIController implements Initializable {
+
+    @FXML
+    private Text clockText;
+    @FXML
+    private Button plus10Min, plus1Min, minus10Min, minus1Min, startButton, stopButton;
+
+    private Timer timer;
+
+    @Override
+    public void initialize(URL location, ResourceBundle resource) {
+        // 初期化時に3分を設定
+        timer = new Timer(3, 0);
+        clockText.setText("03:00");
+    }
+
+}
+```
+**(変更: 16, 20, 21, 22, 23行目)**
+
+16行目では3.3.6.で準備した Timer を扱うための変数を宣言しています。  
+20\~23行目では、timer と時刻表示テキストを3分で初期化しています。  
+
+正常に変更できている場合、次のように表示されます。  
+
+*20.png*
+

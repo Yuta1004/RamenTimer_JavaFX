@@ -13,7 +13,13 @@ public class MainUIController implements Initializable {
     @FXML
     private Button plus10Min, plus1Min, minus10Min, minus1Min, startButton, stopButton;
 
+    private Timer timer;
+
     @Override
-    public void initialize(URL location, ResourceBundle resource) {}
+    public void initialize(URL location, ResourceBundle resource) {
+        // 初期化時に3分を設定
+        timer = new Timer(3, 0);
+        clockText.setText("03:00");
+    }
 
 }

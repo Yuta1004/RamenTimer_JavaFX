@@ -3,7 +3,7 @@ public class Timer {
     private int second = 0;
     public static final int M = 60, S = 1;
 
-    public Clock(int m, int s) {
+    public Timer(int m, int s) {
         set(m, s);
     }
 
