@@ -55,9 +55,9 @@ SceneBuilderを用いてUIを作成します。
 SceneBuilderを起動し、「基本アプリケーション」を選択します。  
 画面左下にある「ドキュメント/階層」タブから、**VBox以外のUIコンポーネントを削除** します。
 
-*1.png*  
-*3.png*  
-*4.png*  
+![1.png](https://yuta1004.github.io/RamenTimer_JavaFX/images/1.png)
+![3.png](https://yuta1004.github.io/RamenTimer_JavaFX/images/3.png)
+![4.png](https://yuta1004.github.io/RamenTimer_JavaFX/images/4.png)
 
 ここまでの作業を **src/fxml** に **MainUI.fxml** として保存します。  
 
@@ -76,19 +76,21 @@ SceneBuilderを起動し、「基本アプリケーション」を選択しま�
 「ライブラリ/**Shapes**」タブから **Text** を「ドキュメント/**階層**」タブにドラックアンドドロップします。  
 このとき、**Text は VBox に含める** ようにしてください。(画像参照)  
 
-*5.png*  
-*6.png*
+![5.png](https://yuta1004.github.io/RamenTimer_JavaFX/images/5.png)
+![6.png](https://yuta1004.github.io/RamenTimer_JavaFX/images/6.png)
+
 
 追加した Text をクリックし、画面右にある「インスペクタ/**Properties**」タブを選択します。  
 そして、**Text入力欄** にタイトルテキストを入力します。  
 また、**Font選択欄** や **Text Alignment選択** を操作して文字の表示方法を調整します。
 
-*7.png*
+![7.png](https://yuta1004.github.io/RamenTimer_JavaFX/images/7.png)
+
 
 「ドキュメント/階層」タブ内の VBox を選択し、「インスペクタ/Properties」タブを選択します。  
 **Alignment選択欄** から **TOP CENTER** を選択します。  
 
-*8.png*
+![8.png](https://yuta1004.github.io/RamenTimer_JavaFX/images/8.png)
 
 
 ## 3.1.3. UIデザイン②
@@ -102,7 +104,8 @@ SceneBuilderを起動し、「基本アプリケーション」を選択しま�
 ここでは、とりあえずの値として **00:00** を設定します。  
 また、文字サイズの変更などもこのタイミングで行います。  
 
-*9.png*
+![9.png](https://yuta1004.github.io/RamenTimer_JavaFX/images/9.png)
+
 
 ## 3.1.4. UIデザイン③
 
@@ -111,21 +114,23 @@ SceneBuilderを起動し、「基本アプリケーション」を選択しま�
 「ライブラリ/**Containers**」タブから **HBox** を「ドキュメント/階層」タブにドラックアンドドロップします。  
 このとき、**HBox は既に存在する Text より下に追加する** ようにしてください。(画像参照)  
 
-*10.png*  
+![10.png](https://yuta1004.github.io/RamenTimer_JavaFX/images/10.png)
 
 追加した HBox を選択し、「インスペクタ/Properties」タブから Alignment を CENTER に変更します。
 
-*11.png*
+![11.png](https://yuta1004.github.io/RamenTimer_JavaFX/images/11.png)
 
 「ライブラリ/**Controls**」タブから **Button** を **4つ** 「ドキュメント/階層」タブにドラックアンドドロップします。  
 このとき、**Button を HBox に含める** ようにしてください。(画像参照)  
 
-*12.png*  
+![12.png](https://yuta1004.github.io/RamenTimer_JavaFX/images/12.png)
 
 それぞれのボタンを選択し、「インスペクタ/Properties」タブからボタンの表示内容を画像の用に変更します。  
 文字サイズの変更などもこのタイミングで行います。  
 
-*13.png*
+![13.png](https://yuta1004.github.io/RamenTimer_JavaFX/images/13.png)
+
+<h3>画像では「-1秒」となっていますが、「+1秒」の誤りです</h3>
 
 ## 3.1.5. UIデザイン④
 
@@ -133,7 +138,7 @@ SceneBuilderを起動し、「基本アプリケーション」を選択しま�
 
 3.1.4. と同様の操作を行うことで、図のようにボタンを配置します。 
 
-*14.png*  
+![14.png](https://yuta1004.github.io/RamenTimer_JavaFX/images/14.png)
 
 ## 3.1.6. UIデザイン⑤
 
@@ -150,7 +155,7 @@ SceneBuilderを起動し、「基本アプリケーション」を選択しま�
 
 調整を行うことで、次のように見た目を整えることが出来ます。  
 
-*15.png*
+![15.png](https://yuta1004.github.io/RamenTimer_JavaFX/images/15.png)
 
 ## 3.2. 起動準備
 
@@ -339,7 +344,7 @@ $ make compile
 $ make run
 ```
 
-*16.png*
+![16.png](https://yuta1004.github.io/RamenTimer_JavaFX/images/16.png)
 
 ## 3.3. プログラミングの準備
 
@@ -456,7 +461,7 @@ Controller から UI の表示を制御する場合、制御したいUIコンポ
 そして **fx:id入力欄** にIDを設定します。  
 任意のIDを設定することが出来ますが、ここでは **clockText** とします。
 
-*17.png*
+![17.png](https://yuta1004.github.io/RamenTimer_JavaFX/images/17.png)
 
 
 以上の操作により、時刻表示テキストは ID "clockText" が設定され、 Controller から制御することが可能になりました。  
@@ -501,7 +506,7 @@ $ make compile
 $ make run
 ```
 
-*18.png*
+![18.png](https://yuta1004.github.io/RamenTimer_JavaFX/images/18.png)
 
 ## 3.3.3. ボタンクリック時の動作を実装してみる
 
@@ -548,7 +553,7 @@ $ make compile
 $ make run
 ```
 
-*19.png*
+![19.png](https://yuta1004.github.io/RamenTimer_JavaFX/images/19.png)
 
 
 ## 3.3.4. コードの整理
@@ -723,7 +728,7 @@ public class MainUIController implements Initializable {
 
 正常に変更できている場合、次のように表示されます。  
 
-*20.png*
+![20.png](https://yuta1004.github.io/RamenTimer_JavaFX/images/20.png)
 
 ## 3.4.2. 10分増加ボタンの実装
 
@@ -774,7 +779,8 @@ Timerクラスには **toStringメソッド** が実装されており、時刻�
 
 正常に実装出来ている場合、10分増加ボタンを押すことで時刻表示テキストが更新されます。  
 
-*21.png*
+![21.png](https://yuta1004.github.io/RamenTimer_JavaFX/images/21.png)
+
 
 
 ## 3.4.3. 1分増加、10秒増加、1秒増加ボタンの実装
@@ -839,7 +845,8 @@ public class MainUIController implements Initializable {
 
 正常に実装出来ている場合、それぞれのボタンが動作します。  
 
-*22.png*
+![22.png](https://yuta1004.github.io/RamenTimer_JavaFX/images/22.png)
+
 
 
 ## 3.4.4. Timelineの準備
@@ -1009,7 +1016,8 @@ Timeline には **playメソッド**、**stopメソッド** が実装されて�
 
 正常に実装できている場合、スタート、ストップボタンを押すことでタイマーを進めたり止めたりすることが出来ます。
 
-*23.png*
+![23.png](https://yuta1004.github.io/RamenTimer_JavaFX/images/23.png)
+
 
 
 ## 3.4.6. 無限にカウントダウンを続けてしまう問題の修正
