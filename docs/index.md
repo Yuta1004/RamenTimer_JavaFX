@@ -583,8 +583,8 @@ public class MainUIController implements Initializable {
 
 - +10分: **plus10Min**
 - +1分: **plus1Min**
-- -10分: **minus10Min**
-- -1分: **minus1Min**
+- +10秒: **plus10Sec**
+- +1秒: **plus1Sec**
 - ストップボタン: **stopButton**
 
 MainUIController.java を次のように編集してください。  
@@ -603,7 +603,7 @@ public class MainUIController implements Initializable {
     @FXML
     private Text clockText;
     @FXML
-    private Button plus10Min, plus1Min, minus10Min, minus1Min, startButton, stopButton;
+    private Button plus10Min, plus1Min, plus10Sec, plus1Sec, startButton, stopButton;
 
     @Override
     public void initialize(URL location, ResourceBundle resource) {}
@@ -699,7 +699,7 @@ public class MainUIController implements Initializable {
     @FXML
     private Text clockText;
     @FXML
-    private Button plus10Min, plus1Min, minus10Min, minus1Min, startButton, stopButton;
+    private Button plus10Min, plus1Min, plus10Sec, plus1Sec, startButton, stopButton;
 
     private Timer timer;
 
@@ -741,7 +741,7 @@ public class MainUIController implements Initializable {
     @FXML
     private Text clockText;
     @FXML
-    private Button plus10Min, plus1Min, minus10Min, minus1Min, startButton, stopButton;
+    private Button plus10Min, plus1Min, plus10Sec, plus1Sec, startButton, stopButton;
 
     private Timer timer;
 

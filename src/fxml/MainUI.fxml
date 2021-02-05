@@ -6,7 +6,6 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-
 <VBox alignment="CENTER" prefHeight="400.0" prefWidth="640.0" spacing="10.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <Text strokeType="OUTSIDE" strokeWidth="0.0" text="ラーメンタイマー" textAlignment="CENTER">
@@ -31,12 +30,12 @@
                   <Font size="20.0" />
                </font>
             </Button>
-            <Button fx:id="minus10Sec" mnemonicParsing="false" text="+10秒">
+            <Button fx:id="plus10Sec" mnemonicParsing="false" text="+10秒">
                <font>
                   <Font size="20.0" />
                </font>
             </Button>
-            <Button fx:id="minus1Sec" mnemonicParsing="false" text="-1秒">
+            <Button fx:id="plus1Sec" mnemonicParsing="false" text="+1秒">
                <font>
                   <Font size="20.0" />
                </font>
