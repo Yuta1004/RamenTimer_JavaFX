@@ -28,6 +28,7 @@
         2. 10分増加ボタンの実装
         3. 1分増加、10秒減少、1秒ボタンの実装
         4. Timelineの準備
+        5. スタート、ストップボタンの実装
 
 ## 1. 環境
 
@@ -918,3 +919,93 @@ Timeline は **Duration** と **KeyFrame** の2つを設定することで利用
 今回の場合は、Duration には処理ごとの間隔を、KeyFrame には定期的に行う処理を設定します。  
 29\~33行目では Duration と KeyFrame の設定を行っており、1秒間隔で、定期的に timer の時刻を1秒減少させて時刻表示テキストを更新するという処理を設定しています。  
 34\~35行目では、設定済みの Keyframe と Duration を用いて Timeline の初期化を行い、動作モードを **INDEFINITE (=無限に動き続ける)** に設定しています。  
+
+
+## 3.4.5. スタート、ストップボタンの実装
+
+スタート、ストップボタンの実装を行います。  
+
+MainUIController.java を次のように編集してください。  
+
+```java
+import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
+import javafx.scene.text.Text;
+import javafx.scene.control.Button;
+import javafx.animation.Timeline;
+import javafx.animation.KeyFrame;
+import javafx.util.Duration;
+
+import java.net.URL;
+import java.util.ResourceBundle;
+
+public class MainUIController implements Initializable {
+
+    @FXML
+    private Text clockText;
+    @FXML
+    private Button plus10Min, plus1Min, plus10Sec, plus1Sec, startButton, stopButton;
+
+    private Timer timer;
+    private Timeline tl;
+
+    @Override
+    public void initialize(URL location, ResourceBundle resource) {
+        // 初期化時に3分を設定
+        timer = new Timer(3, 0);
+        clockText.setText("03:00");
+
+        // Timelineの初期化
+        Duration d = new Duration(1000);
+        KeyFrame kf = new KeyFrame(d, event -> {
+            timer.tick(-1);
+            clockText.setText( timer.toString() );
+        });
+        tl = new Timeline(kf);
+        tl.setCycleCount(Timeline.INDEFINITE);
+
+        // 10分増加ボタンが押されたときの動作
+        plus10Min.setOnAction(event -> {
+            timer.tick(10*60);
+            clockText.setText( timer.toString() );
+        });
+
+        // 1分増加ボタンが押されたときの動作
+        plus1Min.setOnAction(event -> {
+            timer.tick(1*60);
+            clockText.setText( timer.toString() );
+        });
+
+        // 10秒増加ボタンが押されたときの動作
+        plus10Sec.setOnAction(event -> {
+            timer.tick(10);
+            clockText.setText( timer.toString() );
+        });
+
+        // 1秒増加ボタンが押されたときの動作
+        plus1Sec.setOnAction(event -> {
+            timer.tick(1);
+            clockText.setText( timer.toString() );
+        });
+
+        // スタートボタンが押されたとき
+        startButton.setOnAction(event -> {
+            tl.play();
+        });
+
+        // ストップボタンが押されたとき
+        stopButton.setOnAction(event -> {
+            tl.stop();
+        });
+    }
+
+}
+```
+**(変更: 61\~69行目)**
+
+Timeline には **playメソッド**、**stopメソッド** が実装されており、それぞれ Timeline による処理の再開と停止を行うことが出来ます。  
+スタート、ストップボタンではそれぞれ play メソッドと stop メソッドを実行することで、タイマーの再生や停止を実現しています。  
+
+正常に実装できている場合、スタート、ストップボタンを押すことでタイマーを進めたり止めたりすることが出来ます。
+
+*23.png*

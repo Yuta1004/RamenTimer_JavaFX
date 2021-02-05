@@ -57,6 +57,16 @@ public class MainUIController implements Initializable {
             timer.tick(1);
             clockText.setText( timer.toString() );
         });
+
+        // スタートボタンが押されたとき
+        startButton.setOnAction(event -> {
+            tl.play();
+        });
+
+        // ストップボタンが押されたとき
+        stopButton.setOnAction(event -> {
+            tl.stop();
+        });
     }
 
 }
