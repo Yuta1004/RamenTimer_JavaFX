@@ -14,7 +14,8 @@
         6. UIデザイン⑤ 〜見た目の調整〜
     2. プログラミング
         1. Main.java作成
-        2. UI起動
+        2. Makefile作成
+        3. UI起動確認
 
 ## 1. 環境
 
@@ -264,3 +265,65 @@ $ make compile
 # 実行
 $ make run
 ```
+
+## 3.2.3. UI起動確認
+
+3.1.で作成したUIが正常に起動することを確認します。  
+
+Main.javaを次のように編集してください。  
+**※3.2.1.で記述した内容はすべて削除してください**
+
+```java
+import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
+
+import java.io.IOException;
+
+public class Main extends Application {
+
+    public static void main(String[] args) {
+        launch(args);
+    }
+
+    @Override
+    public void start(Stage stage) {
+        try {
+            // シーン作成
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/MainUI.fxml"));
+            Scene scene = new Scene(loader.load());
+
+            // ステージ初期化
+            stage.setTitle("ラーメンタイマー");
+            stage.setScene(scene);
+
+            // UI表示
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+}
+```
+
+「**シーン作成**」では、3.1.で作成した MainUI.fxml の読み込みを行い、**Scene** の初期化を行っています。  
+「**ステージ初期化**」では初期化済みの Scene を **Stage** に登録する処理を行います。  
+このタイミングでウィンドウタイトルの設定を行います。  
+ 
+実行時に実際に表示される画面は Stage 、UIコンポーネントの統括的な管理を行うものが Scene です。  
+JavaFXアプリケーションにおける Stage と Scene の関係は以下に示す図を参照してください。 
+
+[Figure](https://lh3.googleusercontent.com/proxy/7J3Tx0l9387UbgHYI-y-CCnQDaVFJiLd4CpBBpMzX0D_BT9X5HwUt1nfSwBH_5HaW6tr1WtK6v6H7PclZSBc35ndetvm7QNl20wBIdFnChPq8qfKmTJLSxlaJyA)
+
+編集後は次のコマンドを実行して、正常にUIが表示されることを確認してください。
+
+```
+$ make compile
+$ make run
+```
+
+*16.png*
+
