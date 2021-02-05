@@ -16,6 +16,7 @@ public class Main extends Application {
         try {
             // シーン作成
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/MainUI.fxml"));
+            loader.setController(new MainUIController());
             Scene scene = new Scene(loader.load());
 
             // ステージ初期化

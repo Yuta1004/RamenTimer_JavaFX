@@ -16,6 +16,8 @@
         1. Main.java作成
         2. Makefile作成
         3. UI起動確認
+    3. プログラミング
+        1. MainUIController.java作成
 
 ## 1. 環境
 
@@ -326,3 +328,104 @@ $ make run
 ```
 
 *16.png*
+
+## 3.3. プログラミング
+
+## 3.3.1. MainUIController.java作成
+
+3.2.3.までの内容でUIの起動を表示確認を行うことが出来ました。    
+ボタンクリック時の挙動など、UIコンポーネントに意味をもたせるためには Controller を使用します。  
+
+以下に示す場所に **MainUIController.java** を作成し、テキストエディタで内容を記述してください。
+
+```
+.
+├── Makefile
+├── README.md
+├── bin
+│   ├── Main.class
+│   └── fxml
+│       └── MainUI.fxml
+└── src
+    ├── Main.java
+    ├── MainUIController.java
+    └── fxml
+        └── MainUI.fxml
+```
+
+```java
+import javafx.fxml.Initializable;
+
+import java.net.URL;
+import java.util.ResourceBundle;
+
+public class MainUIController implements Initializable {
+
+    @Override
+    public void initialize(URL location, ResourceBundle resource) {}
+
+}
+```
+
+次に MainUI.java を開き
+
+```java
+FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/MainUI.fxml"));
+```
+
+の次の行に
+
+```java
+loader.setController(new MainUIController());
+```
+
+を追加してください。  
+
+追加後の Main.java は以下のようになります。  
+
+```java
+import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
+
+import java.io.IOException;
+
+public class Main extends Application {
+
+    public static void main(String[] args) {
+        launch(args);
+    }
+
+    @Override
+    public void start(Stage stage) {
+        try {
+            // シーン作成
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/MainUI.fxml"));
+            loader.setController(new MainUIController());
+            Scene scene = new Scene(loader.load());
+
+            // ステージ初期化
+            stage.setTitle("ラーメンタイマー");
+            stage.setScene(scene);
+
+            // UI表示
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+}
+```
+
+ここで作成した MainUIController には動作を記述してないため新しい動きをするなどはありませんが、プログラムのチェックのためにコンパイルと実行を行ってください。  
+
+```
+$ make compile
+$ make run
+```
+
+3.2.3.と同じように UI が表示された場合、正常に動作しています。  
+
