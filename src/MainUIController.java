@@ -11,7 +11,7 @@ public class MainUIController implements Initializable {
     @FXML
     private Text clockText;
     @FXML
-    private Button plus10Min, plus1Min, minus10Min, minus1Min, startButton, stopButton;
+    private Button plus10Min, plus1Min, plus10Sec, plus1Sec, startButton, stopButton;
 
     private Timer timer;
 
@@ -24,6 +24,24 @@ public class MainUIController implements Initializable {
         // 10分増加ボタンが押されたときの動作
         plus10Min.setOnAction(event -> {
             timer.tick(10*60);
+            clockText.setText( timer.toString() );
+        });
+
+        // 1分増加ボタンが押されたときの動作
+        plus1Min.setOnAction(event -> {
+            timer.tick(1*60);
+            clockText.setText( timer.toString() );
+        });
+
+        // 10秒増加ボタンが押されたときの動作
+        plus10Sec.setOnAction(event -> {
+            timer.tick(10);
+            clockText.setText( timer.toString() );
+        });
+
+        // 1秒増加ボタンが押されたときの動作
+        plus1Sec.setOnAction(event -> {
+            timer.tick(1);
             clockText.setText( timer.toString() );
         });
     }

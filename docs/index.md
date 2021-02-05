@@ -26,6 +26,7 @@
     4. タイマーの実装
         1. 時刻の初期化
         2. 10分増加ボタンの実装
+        3. 1分増加、10秒減少、1秒ボタンの実装
 
 ## 1. 環境
 
@@ -772,3 +773,67 @@ Timerクラスには **toStringメソッド** が実装されており、時刻�
 
 *21.png*
 
+
+## 3.4.3. 1分増加、10秒増加、1秒増加ボタンの実装
+
+10分増加ボタンを除いた残りのタイマーの時刻を調整するボタンを実装します。  
+追加するコードは3.4.2.とほとんど同じで、tick メソッドに渡す秒数が変化するのみです。  
+
+MainUIController.java を以下のように変更してください。  
+
+```java
+import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
+import javafx.scene.text.Text;
+import javafx.scene.control.Button;
+
+import java.net.URL;
+import java.util.ResourceBundle;
+
+public class MainUIController implements Initializable {
+
+    @FXML
+    private Text clockText;
+    @FXML
+    private Button plus10Min, plus1Min, plus10Sec, plus1Sec, startButton, stopButton;
+
+    private Timer timer;
+
+    @Override
+    public void initialize(URL location, ResourceBundle resource) {
+        // 初期化時に3分を設定
+        timer = new Timer(3, 0);
+        clockText.setText("03:00");
+
+        // 10分増加ボタンが押されたときの動作
+        plus10Min.setOnAction(event -> {
+            timer.tick(10*60);
+            clockText.setText( timer.toString() );
+        });
+
+        // 1分増加ボタンが押されたときの動作
+        plus1Min.setOnAction(event -> {
+            timer.tick(1*60);
+            clockText.setText( timer.toString() );
+        });
+
+        // 10秒増加ボタンが押されたときの動作
+        plus10Sec.setOnAction(event -> {
+            timer.tick(10);
+            clockText.setText( timer.toString() );
+        });
+
+        // 1秒増加ボタンが押されたときの動作
+        plus1Sec.setOnAction(event -> {
+            timer.tick(1);
+            clockText.setText( timer.toString() );
+        });
+    }
+
+}
+```
+**(変更: 30\~46行目)**
+
+正常に実装出来ている場合、それぞれのボタンが動作します。  
+
+*22.png*
