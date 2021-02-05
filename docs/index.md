@@ -19,6 +19,7 @@
     3. プログラミング
         1. MainUIController.java作成
         2. 時刻表示テキストを変更してみる
+        3. ボタンクリック時の動作を実装してみる
 
 ## 1. 環境
 
@@ -491,3 +492,51 @@ $ make run
 ```
 
 *18.png*
+
+## 3.3.3. ボタンクリック時の動作を実装してみる
+
+3.3.2.では Controller 初期化時に時刻表示テキストの変更を行いました。  
+3.3.3.ではスタートボタンをクリックした時に時刻表示できストを変更するようにしてみます。  
+
+まず、3.3.2.と同様にしてスタートボタンに **startButton** という ID を設定してください。  
+次に、MainUIController.java を以下のように編集してください。  
+
+```java
+import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
+import javafx.scene.text.Text;
+import javafx.scene.control.Button;
+
+import java.net.URL;
+import java.util.ResourceBundle;
+
+public class MainUIController implements Initializable {
+
+    @FXML
+    private Text clockText;
+    @FXML
+    private Button startButton;
+
+    @Override
+    public void initialize(URL location, ResourceBundle resource) {
+        startButton.setOnAction(event -> {
+            clockText.setText("12:04");
+        });
+    }
+
+}
+```
+**(変更: 4, 13, 14, 18, 19, 20行目)**
+
+ボタンクリック時の動作は、**setOnActionメソッド** を上のように記述することで実装することが出来ます。  
+複数の動作を設定することもでき、その場合は `{}` の内部に複数行の処理を記述します。   
+
+この状態でコンパイルし実行すると、スタートボタンを押すと時刻表示テキストが指定した文字列に変更されることが確認できます。  
+
+```
+$ make compile
+$ make run
+```
+
+*19.png*
+

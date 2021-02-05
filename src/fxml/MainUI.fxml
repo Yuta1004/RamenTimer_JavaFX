@@ -45,7 +45,7 @@
       </HBox>
       <HBox alignment="CENTER" prefHeight="80.0" prefWidth="200.0" spacing="20.0">
          <children>
-            <Button mnemonicParsing="false" text="スタート">
+            <Button fx:id="startButton" mnemonicParsing="false" text="スタート">
                <font>
                   <Font size="20.0" />
                </font>
