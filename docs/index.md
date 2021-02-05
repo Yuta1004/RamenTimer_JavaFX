@@ -14,6 +14,7 @@
         6. UIデザイン⑤ 〜見た目の調整〜
     2. プログラミング
         1. Main.java作成
+        2. UI起動
 
 ## 1. 環境
 
@@ -182,3 +183,84 @@ Hello RamenTimer!
 ```
 
 メッセージが正常に出力されることを確認してください。  
+
+## 3.2.2. Makefile作成
+
+コンパイルや実行を楽に行うためにMakefileを作成します。  
+**Makefile** を利用することで、入力するコマンドの量を減らすことが出来ます。  
+
+最も基本的な Makefile は「**ターゲット**」と「**コマンド**」の集合から成ります。  
+フォーマットは以下のとおりです。  
+
+```
+ターゲットA:
+    コマンドA
+    コマンドB
+    コマンドC
+
+ターゲットB:
+    コマンドD
+    コマンドE
+```
+
+Makefile は `make` コマンドとともに使用します。  
+上に示したファイルを例にすると `make ターゲットA` と入力することで、ターゲットAに登録されているコマンド群が自動で順に実行されます。  
+この場合は、「コマンドA」「コマンドB」「コマンドC」の順に実行が行われます。  
+
+Makefile 内では **定数** を利用することが出来ます。  
+使用するライブラリのパスなど、文字列の長さが長く、変更の可能性がないものなどを登録することで、全体の記述量を減らすことが出来ます。
+
+```
+定数名 := 文字列
+```
+
+定数は次のように記述することで、その内容を参照することが出来ます。  
+
+```
+$(定数名)
+```
+
+以上のことを踏まえ、今回のラーメンタイマー開発で使用するMakefileを次に示します。  
+Makefile は src を同じ階層に保存してください。  
+
+```
+├── Makefile
+├── README.md
+├── bin
+│   └── Main.class
+└── src
+    ├── Main.java
+    └── fxml
+        └── MainUI.fxml
+```
+
+```Makefile
+# Makefile
+
+JAVAFX_PATH := JavaFXライブラリが配置されているパス
+JAVAFX_MODULES := javafx.controls,javafx.base,javafx.fxml,javafx.graphics,javafx.media,javafx.swing,javafx.web
+
+OPTS := -p $(JAVAFX_PATH)/lib --add-modules $(JAVAFX_MODULES)
+JAVA_OPTS := $(OPTS) -classpath bin
+JAVAC_OPTS := $(OPTS) -sourcepath src -d bin
+
+
+run:
+	cp -r src/fxml bin
+	java $(JAVA_OPTS) Main
+
+
+compile:
+	javac $(JAVAC_OPTS) src/Main.java
+
+```
+
+この Makefile を用いることで、コンパイルや実行は次のコマンドで代用することが出来ます。
+
+```
+# コンパイル
+$ make compile
+
+# 実行
+$ make run
+```
