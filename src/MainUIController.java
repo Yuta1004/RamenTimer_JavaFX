@@ -20,6 +20,12 @@ public class MainUIController implements Initializable {
         // 初期化時に3分を設定
         timer = new Timer(3, 0);
         clockText.setText("03:00");
+
+        // 10分増加ボタンが押されたときの動作
+        plus10Min.setOnAction(event -> {
+            timer.tick(10*60);
+            clockText.setText( timer.toString() );
+        });
     }
 
 }

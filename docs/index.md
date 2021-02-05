@@ -25,6 +25,7 @@
         6. Timer.javaの準備
     4. タイマーの実装
         1. 時刻の初期化
+        2. 10分増加ボタンの実装
 
 ## 1. 環境
 
@@ -719,4 +720,55 @@ public class MainUIController implements Initializable {
 正常に変更できている場合、次のように表示されます。  
 
 *20.png*
+
+## 3.4.2. 10分増加ボタンの実装
+
+タイマーの時刻を調整するボタンのうちの1つである、10分増加ボタンの動作を実装します。  
+
+MainUIController.java を次のように変更してください。  
+
+```java
+import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
+import javafx.scene.text.Text;
+import javafx.scene.control.Button;
+
+import java.net.URL;
+import java.util.ResourceBundle;
+
+public class MainUIController implements Initializable {
+
+    @FXML
+    private Text clockText;
+    @FXML
+    private Button plus10Min, plus1Min, minus10Min, minus1Min, startButton, stopButton;
+
+    private Timer timer;
+
+    @Override
+    public void initialize(URL location, ResourceBundle resource) {
+        // 初期化時に3分を設定
+        timer = new Timer(3, 0);
+        clockText.setText("03:00");
+
+        // 10分増加ボタンが押されたときの動作
+        plus10Min.setOnAction(event -> {
+            timer.tick(10*60);
+            clockText.setText( timer.toString() );
+        });
+    }
+
+}
+```
+**(変更: 24, 25, 26, 27, 28行目)**
+
+Timerクラスには **tickメソッド** が実装されており、引数で指定された秒数だけ内部の時刻を進めるという処理を行います。  
+26行目では、10分増加ボタンが押された時に Timer インスタンスがもつ時刻を 600 秒 (=10分) 進めるという処理を行っています。
+ 
+Timerクラスには **toStringメソッド** が実装されており、時刻データを文字列の形式へ変換するという処理を行います。  
+27行目では、toString メソッドの実行結果を時刻表示テキストにセットすることで、時刻の更新処理を行っています。  
+
+正常に実装出来ている場合、10分増加ボタンを押すことで時刻表示テキストが更新されます。  
+
+*21.png*
 
