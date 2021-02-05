@@ -1,3 +1,3 @@
 # Ramen Timer
 
-[Github Pages](https://yuta1004.github.io/RamenTimer_JavaFX/index.html)
+[実装マニュアル](https://yuta1004.github.io/RamenTimer_JavaFX/index.html)
