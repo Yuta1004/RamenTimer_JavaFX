@@ -42,7 +42,7 @@
 
 ## 2. 完成品
 
-*ここに完成画像*
+![release.png](https://yuta1004.github.io/RamenTimer_JavaFX/images/release.png)
 
 ## 3. 開発
 
