@@ -27,6 +27,7 @@
         1. 時刻の初期化
         2. 10分増加ボタンの実装
         3. 1分増加、10秒減少、1秒ボタンの実装
+        4. Timelineの準備
 
 ## 1. 環境
 
@@ -645,7 +646,7 @@ Timer.java は時刻管理を行うためのクラスが記述されたプログ
 ```java
 public class Timer {
 
-    private int second = 0;
+    public int second = 0;
     public static final int M = 60, S = 1;
 
     public Timer(int m, int s) {
@@ -837,3 +838,83 @@ public class MainUIController implements Initializable {
 正常に実装出来ている場合、それぞれのボタンが動作します。  
 
 *22.png*
+
+
+## 3.4.4. Timelineの準備
+
+タイマーがカウントダウンを行うためには、1秒毎に時刻の更新処理を行う必要があります。  
+JavaFX にはこのような定期的に処理を行うためのものが実装されており、**Timeline** という名前でユーザはこれを利用することが出来ます。  
+ここでは、Timeline の初期化までを行います。  
+
+MainUIController.java を以下のように変更してください。  
+
+```java
+import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
+import javafx.scene.text.Text;
+import javafx.scene.control.Button;
+import javafx.animation.Timeline;
+import javafx.animation.KeyFrame;
+import javafx.util.Duration;
+
+import java.net.URL;
+import java.util.ResourceBundle;
+
+public class MainUIController implements Initializable {
+
+    @FXML
+    private Text clockText;
+    @FXML
+    private Button plus10Min, plus1Min, plus10Sec, plus1Sec, startButton, stopButton;
+
+    private Timer timer;
+    private Timeline tl;
+
+    @Override
+    public void initialize(URL location, ResourceBundle resource) {
+        // 初期化時に3分を設定
+        timer = new Timer(3, 0);
+        clockText.setText("03:00");
+
+        // Timelineの初期化
+        Duration d = new Duration(1000);
+        KeyFrame kf = new KeyFrame(d, event -> {
+            timer.tick(-1);
+            clockText.setText( timer.toString() );
+        });
+        tl = new Timeline(kf);
+        tl.setCycleCount(Timeline.INDEFINITE);
+
+        // 10分増加ボタンが押されたときの動作
+        plus10Min.setOnAction(event -> {
+            timer.tick(10*60);
+            clockText.setText( timer.toString() );
+        });
+
+        // 1分増加ボタンが押されたときの動作
+        plus1Min.setOnAction(event -> {
+            timer.tick(1*60);
+            clockText.setText( timer.toString() );
+        });
+
+        // 10秒増加ボタンが押されたときの動作
+        plus10Sec.setOnAction(event -> {
+            timer.tick(10);
+            clockText.setText( timer.toString() );
+        });
+
+        // 1秒増加ボタンが押されたときの動作
+        plus1Sec.setOnAction(event -> {
+            timer.tick(1);
+            clockText.setText( timer.toString() );
+        });
+    }
+
+}
+```
+**(変更: 5, 6, 7, 20, 28\~35行目)**
+
+Timeline は **Duration** と **KeyFrame** の2つを設定することで利用することが出来ます。  
+今回の場合は、Duration には処理ごとの間隔を、KeyFrame には定期的に行う処理を設定します。  
+29\~33行目では Duration と KeyFrame の設定を行っており、1秒間隔で、定期的に timer の時刻を1秒減少させて時刻表示テキストを更新するという処理を設定しています。  
+34\~35行目では、設定済みの Keyframe と Duration を用いて Timeline の初期化を行い、動作モードを **INDEFINITE (=無限に動き続ける)** に設定しています。  
