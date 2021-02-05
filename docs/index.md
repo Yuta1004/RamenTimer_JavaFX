@@ -16,12 +16,13 @@
         1. Main.java作成
         2. Makefile作成
         3. UI起動確認
-    3. プログラミング
+    3. プログラミングの準備
         1. MainUIController.java作成
         2. 時刻表示テキストを変更してみる
         3. ボタンクリック時の動作を実装してみる
         4. コードの整理
         5. ID設定
+        6. Timer.javaの準備
 
 ## 1. 環境
 
@@ -333,7 +334,7 @@ $ make run
 
 *16.png*
 
-## 3.3. プログラミング
+## 3.3. プログラミングの準備
 
 ## 3.3.1. MainUIController.java作成
 
@@ -611,4 +612,63 @@ public class MainUIController implements Initializable {
 変更後はコンパイルと実行を行い、正常にUIが表示されることを確認してください。  
 もしエラーが発生する場合、IDの設定ミスの可能性があります。  
 
+## 3.3.6. Timer.javaの準備
 
+ラーメンタイマー実装の前に、**Timer.java** を準備します。  
+Timer.java は時刻管理を行うためのクラスが記述されたプログラムファイルです。  
+本稿では JavaFX を用いた GUI をもつアプリケーションの作成に焦点を当てているためタイマーの実装は省略します。  
+
+次のプログラムを Timer.java として以下に示す場所に保存してください。  
+
+```
+.
+├── Makefile
+├── README.md
+├── bin
+│   ├── Clock.class
+│   ├── Main.class
+│   ├── MainUIController.class
+│   └── fxml
+│       └── MainUI.fxml
+└── src
+    ├── Main.java
+    ├── MainUIController.java
+    ├── Timer.java
+    └── fxml
+        └── MainUI.fxml
+```
+
+```java
+public class Timer {
+
+    private int second = 0;
+    public static final int M = 60, S = 1;
+
+    public Clock(int m, int s) {
+        set(m, s);
+    }
+
+    public void set(int m, int s) {
+        second = m*M + s*S;
+    }
+
+    public void tick() {
+        tick(1);
+    }
+
+    public void tick(int t) {
+        // 加算
+        second += t;
+
+        // 繰り上げ処理
+        if(second >= 60*100)
+            second %= 60*100;
+        if(second < 0)
+            second = (60*100)-Math.abs(second)%(60*100);
+    }
+
+    public String toString() {
+        return String.format("%02d:%02d", second/M, second%M);
+    }
+}
+```
