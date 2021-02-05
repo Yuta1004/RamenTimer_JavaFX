@@ -28,8 +28,10 @@ public class MainUIController implements Initializable {
         // Timelineの初期化
         Duration d = new Duration(1000);
         KeyFrame kf = new KeyFrame(d, event -> {
-            timer.tick(-1);
-            clockText.setText( timer.toString() );
+            if(timer.second > 0) {
+                timer.tick(-1);
+                clockText.setText( timer.toString() );
+            }
         });
         tl = new Timeline(kf);
         tl.setCycleCount(Timeline.INDEFINITE);

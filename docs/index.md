@@ -29,6 +29,7 @@
         3. 1分増加、10秒減少、1秒ボタンの実装
         4. Timelineの準備
         5. スタート、ストップボタンの実装
+        6. 無限にカウントダウンを続けてしまう問題の修正
 
 ## 1. 環境
 
@@ -1009,3 +1010,98 @@ Timeline には **playメソッド**、**stopメソッド** が実装されて�
 正常に実装できている場合、スタート、ストップボタンを押すことでタイマーを進めたり止めたりすることが出来ます。
 
 *23.png*
+
+
+## 3.4.6. 無限にカウントダウンを続けてしまう問題の修正
+
+3.4.5.までのコードではタイマーが無限にカウントダウンを続けてしまい、ラーメンタイマーとしては未完成です。  
+ここではこのような問題を修正します。  
+
+MainUIController.java を以下のように編集してください。  
+
+```java
+import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
+import javafx.scene.text.Text;
+import javafx.scene.control.Button;
+import javafx.animation.Timeline;
+import javafx.animation.KeyFrame;
+import javafx.util.Duration;
+
+import java.net.URL;
+import java.util.ResourceBundle;
+
+public class MainUIController implements Initializable {
+
+    @FXML
+    private Text clockText;
+    @FXML
+    private Button plus10Min, plus1Min, plus10Sec, plus1Sec, startButton, stopButton;
+
+    private Timer timer;
+    private Timeline tl;
+
+    @Override
+    public void initialize(URL location, ResourceBundle resource) {
+        // 初期化時に3分を設定
+        timer = new Timer(3, 0);
+        clockText.setText("03:00");
+
+        // Timelineの初期化
+        Duration d = new Duration(1000);
+        KeyFrame kf = new KeyFrame(d, event -> {
+            if(timer.second > 0) {
+                timer.tick(-1);
+                clockText.setText( timer.toString() );
+            }
+        });
+        tl = new Timeline(kf);
+        tl.setCycleCount(Timeline.INDEFINITE);
+
+        // 10分増加ボタンが押されたときの動作
+        plus10Min.setOnAction(event -> {
+            timer.tick(10*60);
+            clockText.setText( timer.toString() );
+        });
+
+        // 1分増加ボタンが押されたときの動作
+        plus1Min.setOnAction(event -> {
+            timer.tick(1*60);
+            clockText.setText( timer.toString() );
+        });
+
+        // 10秒増加ボタンが押されたときの動作
+        plus10Sec.setOnAction(event -> {
+            timer.tick(10);
+            clockText.setText( timer.toString() );
+        });
+
+        // 1秒増加ボタンが押されたときの動作
+        plus1Sec.setOnAction(event -> {
+            timer.tick(1);
+            clockText.setText( timer.toString() );
+        });
+
+        // スタートボタンが押されたとき
+        startButton.setOnAction(event -> {
+            tl.play();
+        });
+
+        // ストップボタンが押されたとき
+        stopButton.setOnAction(event -> {
+            tl.stop();
+        });
+    }
+
+}
+```
+**(変更: 31, 34行目)**
+
+ここでは、KeyFrame 内に設定していた処理を次のように変更しました。
+
+- 旧: タイマーの時刻を1秒減少させて、時刻表示テキストを更新する
+- 新: **タイマーが0秒でないとき**、タイマーの時刻を1病減少させて、時刻表示テキストを更新する
+
+**if文** を用いてタイマーが0秒でない時にのみ更新処理を行うことで、無限にカウントダウンを続けてしまう問題を修正しました。  
+
+正常に実装できている場合、タイマーが0秒になるとカウントダウンが停止します。
