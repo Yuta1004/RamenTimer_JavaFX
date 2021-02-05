@@ -43,5 +43,19 @@
             </Button>
          </children>
       </HBox>
+      <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+         <children>
+            <Button mnemonicParsing="false" text="スタート">
+               <font>
+                  <Font size="20.0" />
+               </font>
+            </Button>
+            <Button mnemonicParsing="false" text="ストップ">
+               <font>
+                  <Font size="20.0" />
+               </font>
+            </Button>
+         </children>
+      </HBox>
    </children>
 </VBox>
