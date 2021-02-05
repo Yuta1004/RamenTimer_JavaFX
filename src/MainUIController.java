@@ -14,10 +14,6 @@ public class MainUIController implements Initializable {
     private Button startButton;
 
     @Override
-    public void initialize(URL location, ResourceBundle resource) {
-        startButton.setOnAction(event -> {
-            clockText.setText("12:04");
-        });
-    }
+    public void initialize(URL location, ResourceBundle resource) {}
 
 }

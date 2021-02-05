@@ -20,6 +20,7 @@
         1. MainUIController.java作成
         2. 時刻表示テキストを変更してみる
         3. ボタンクリック時の動作を実装してみる
+        4. コードの整理
 
 ## 1. 環境
 
@@ -540,3 +541,30 @@ $ make run
 
 *19.png*
 
+
+## 3.3.4. コードの整理
+
+ラーメンタイマーの実装を行う前に、3.3.2.と3.3.3.で追記したコードを削除します。  
+MainUIController.java を次のようにしてください。  
+
+```java
+import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
+import javafx.scene.text.Text;
+import javafx.scene.control.Button;
+
+import java.net.URL;
+import java.util.ResourceBundle;
+
+public class MainUIController implements Initializable {
+
+    @FXML
+    private Text clockText;
+    @FXML
+    private Button startButton;
+
+    @Override
+    public void initialize(URL location, ResourceBundle resource) {}
+
+}
+```
