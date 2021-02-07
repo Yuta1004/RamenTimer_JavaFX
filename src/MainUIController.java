@@ -19,12 +19,14 @@ public class MainUIController implements Initializable {
 
     private Timer timer;
     private Timeline tl;
-    private AudioClip finishMusic;
+    private AudioClip finishMusic, loopMusic;
 
     @Override
     public void initialize(URL location, ResourceBundle resource) {
         // 初期化時に音声ファイルを読み込み
         finishMusic = new AudioClip(getClass().getResource("/music/finish.mp3").toString());
+        loopMusic = new AudioClip(getClass().getResource("/music/loop.mp3").toString());
+        loopMusic.setCycleCount(AudioClip.INDEFINITE);
 
         // 初期化時に3分を設定
         timer = new Timer(3, 0);
@@ -38,6 +40,7 @@ public class MainUIController implements Initializable {
                 clockText.setText( timer.toString() );
             } else {
                 tl.stop();
+                loopMusic.stop();
                 finishMusic.play();
             }
         });
@@ -71,11 +74,13 @@ public class MainUIController implements Initializable {
         // スタートボタンが押されたとき
         startButton.setOnAction(event -> {
             tl.play();
+            loopMusic.play();
         });
 
         // ストップボタンが押されたとき
         stopButton.setOnAction(event -> {
             tl.stop();
+            loopMusic.stop();
         });
     }
 
