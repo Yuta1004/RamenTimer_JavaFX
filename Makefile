@@ -9,6 +9,7 @@ JAVAC_OPTS := $(OPTS) -sourcepath src -d bin
 
 run:
 	cp -r src/fxml bin
+	cp -r src/music bin
 	java $(JAVA_OPTS) Main
 
 

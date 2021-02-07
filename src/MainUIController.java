@@ -2,6 +2,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.text.Text;
 import javafx.scene.control.Button;
+import javafx.scene.media.AudioClip;
 import javafx.animation.Timeline;
 import javafx.animation.KeyFrame;
 import javafx.util.Duration;
@@ -18,9 +19,13 @@ public class MainUIController implements Initializable {
 
     private Timer timer;
     private Timeline tl;
+    private AudioClip finishMusic;
 
     @Override
     public void initialize(URL location, ResourceBundle resource) {
+        // 初期化時に音声ファイルを読み込み
+        finishMusic = new AudioClip(getClass().getResource("/music/finish.mp3").toString());
+
         // 初期化時に3分を設定
         timer = new Timer(3, 0);
         clockText.setText("03:00");
@@ -31,6 +36,9 @@ public class MainUIController implements Initializable {
             if(timer.second > 0) {
                 timer.tick(-1);
                 clockText.setText( timer.toString() );
+            } else {
+                tl.stop();
+                finishMusic.play();
             }
         });
         tl = new Timeline(kf);

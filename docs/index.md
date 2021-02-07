@@ -30,6 +30,7 @@
         4. Timelineの準備
         5. スタート、ストップボタンの実装
         6. 無限にカウントダウンを続けてしまう問題の修正
+        7. タイマーの終了の際に音楽を再生する
 
 ## 1. 環境
 
@@ -1113,6 +1114,164 @@ public class MainUIController implements Initializable {
 **if文** を用いてタイマーが0秒でない時にのみ更新処理を行うことで、無限にカウントダウンを続けてしまう問題を修正しました。  
 
 正常に実装できている場合、タイマーが0秒になるとカウントダウンが停止します。
+
+
+## 3.4.7. タイマー終了の際に音楽を再生する
+
+ここでは、タイマー終了時に音楽を再生する機能を実装します。  
+
+音楽の再生には **AudioClip** を使用します。  
+AudioClip を用いることで、手軽に音楽を再生する事ができます。  
+
+まず、再生する音楽をダウンロードします。  
+今回は以下のリンクで公開されているものを使用します。  
+
+[魔王魂 効果音 ベル14](https://maoudamashii.jokersounds.com/music/se/mp3/se_maoudamashii_chime14.mp3)
+
+ダウンロードしたmp3ファイルは以下のように配置してください。  
+
+```
+.
+├── Makefile
+├── README.md
+├── bin
+│   ├── Clock.class
+│   ├── Main.class
+│   ├── MainUIController.class
+│   ├── Timer.class
+│   └── fxml
+│       └── MainUI.fxml
+└── src
+    ├── Main.java
+    ├── MainUIController.java
+    ├── Timer.java
+    ├── fxml
+    │   └── MainUI.fxml
+    └── music
+        └── finish.mp3
+```
+
+次に、MainUIController.javaを以下のように編集してください。  
+
+```java
+import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
+import javafx.scene.text.Text;
+import javafx.scene.control.Button;
+import javafx.scene.media.AudioClip;
+import javafx.animation.Timeline;
+import javafx.animation.KeyFrame;
+import javafx.util.Duration;
+
+import java.net.URL;
+import java.util.ResourceBundle;
+
+public class MainUIController implements Initializable {
+
+    @FXML
+    private Text clockText;
+    @FXML
+    private Button plus10Min, plus1Min, plus10Sec, plus1Sec, startButton, stopButton;
+
+    private Timer timer;
+    private Timeline tl;
+    private AudioClip finishMusic;
+
+    @Override
+    public void initialize(URL location, ResourceBundle resource) {
+        // 初期化時に音声ファイルを読み込み
+        finishMusic = new AudioClip(getClass().getResource("/music/finish.mp3").toString());
+
+        // 初期化時に3分を設定
+        timer = new Timer(3, 0);
+        clockText.setText("03:00");
+
+        // Timelineの初期化
+        Duration d = new Duration(1000);
+        KeyFrame kf = new KeyFrame(d, event -> {
+            if(timer.second > 0) {
+                timer.tick(-1);
+                clockText.setText( timer.toString() );
+            } else {
+                tl.stop();
+                finishMusic.play();
+            }
+        });
+        tl = new Timeline(kf);
+        tl.setCycleCount(Timeline.INDEFINITE);
+
+        // 10分増加ボタンが押されたときの動作
+        plus10Min.setOnAction(event -> {
+            timer.tick(10*60);
+            clockText.setText( timer.toString() );
+        });
+
+        // 1分増加ボタンが押されたときの動作
+        plus1Min.setOnAction(event -> {
+            timer.tick(1*60);
+            clockText.setText( timer.toString() );
+        });
+
+        // 10秒増加ボタンが押されたときの動作
+        plus10Sec.setOnAction(event -> {
+            timer.tick(10);
+            clockText.setText( timer.toString() );
+        });
+
+        // 1秒増加ボタンが押されたときの動作
+        plus1Sec.setOnAction(event -> {
+            timer.tick(1);
+            clockText.setText( timer.toString() );
+        });
+
+        // スタートボタンが押されたとき
+        startButton.setOnAction(event -> {
+            tl.play();
+        });
+
+        // ストップボタンが押されたとき
+        stopButton.setOnAction(event -> {
+            tl.stop();
+        });
+    }
+
+}
+```
+**(変更: 5, 22, 26, 27, 39~42行目)**
+
+また、Makefileを次のように編集してください。  
+
+```
+# Makefile
+
+JAVAFX_PATH := JavaFXが配置されているパス
+JAVAFX_MODULES := javafx.controls,javafx.base,javafx.fxml,javafx.graphics,javafx.media,javafx.swing,javafx.web
+
+OPTS := -p $(JAVAFX_PATH)/lib --add-modules $(JAVAFX_MODULES)
+JAVA_OPTS := $(OPTS) -classpath bin
+JAVAC_OPTS := $(OPTS) -sourcepath src -d bin
+
+
+run:
+	cp -r src/fxml bin
+	cp -r src/music bin
+	java $(JAVA_OPTS) Main
+
+
+compile:
+	javac $(JAVAC_OPTS) src/Main.java
+```
+
+**(変更: 13行目)**
+
+AudioClip をプログラムで使用するために 5 行目で import 文を用いています。  
+また、音楽ファイルを使用するために 22 行目で AudioClip 変数の宣言と、26~27 行目でファイルの読み込みを行っています。  
+そして、タイマー終了時に再生を行うために 39~42 行目に if\-else 文を追加しています。  
+3.4.6.では 0 秒でない時にタイマー継続という処理を行っていましたが、そうでないとき(=タイマーが終了したとき)には Timeline の定期処理をストップさせた後に AudioClip の再生を行っています。  
+
+正常に実装できている場合、タイマーの残り時間が 0 秒になると音楽が 1 度だけ再生されます。
+
+
 
 --
 
