@@ -589,6 +589,8 @@ div.prism-show-language > div.prism-show-language-label {
 <li>Timelineの準備</li>
 <li>スタート、ストップボタンの実装</li>
 <li>無限にカウントダウンを続けてしまう問題の修正</li>
+<li>タイマーの終了の際に音楽を再生する</li>
+<li>カウントダウン中に無限に音楽を再生する</li>
 </ol></li>
 </ol></li>
 </ol>
@@ -1612,7 +1614,288 @@ public class MainUIController implements Initializable {
 
 <p>正常に実装できている場合、タイマーが0秒になるとカウントダウンが停止します。</p>
 
-<h2 id="toc_31"></h2>
+<h2 id="toc_31">3.4.7. タイマー終了の際に音楽を再生する</h2>
+
+<p>ここでは、タイマー終了時に音楽を再生する機能を実装します。  </p>
+
+<p>音楽の再生には <strong>AudioClip</strong> を使用します。<br>
+AudioClip を用いることで、手軽に音楽を再生する事ができます。  </p>
+
+<p>まず、再生する音楽をダウンロードします。<br>
+今回は以下のリンクで公開されているものを使用します。  </p>
+
+<p><a href="https://maoudamashii.jokersounds.com/music/se/mp3/se_maoudamashii_chime14.mp3">魔王魂 効果音 ベル14</a></p>
+
+<p>ダウンロードしたmp3ファイルは以下のように配置してください。  </p>
+
+<div><pre class="line-numbers"><code class="language-none">.
+├── Makefile
+├── README.md
+├── bin
+│   ├── Clock.class
+│   ├── Main.class
+│   ├── MainUIController.class
+│   ├── Timer.class
+│   └── fxml
+│       └── MainUI.fxml
+└── src
+    ├── Main.java
+    ├── MainUIController.java
+    ├── Timer.java
+    ├── fxml
+    │   └── MainUI.fxml
+    └── music
+        └── finish.mp3</code></pre></div>
+
+<p>次に、MainUIController.javaを以下のように編集してください。  </p>
+
+<div><pre class="line-numbers"><code class="language-java">import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
+import javafx.scene.text.Text;
+import javafx.scene.control.Button;
+import javafx.scene.media.AudioClip;
+import javafx.animation.Timeline;
+import javafx.animation.KeyFrame;
+import javafx.util.Duration;
+
+import java.net.URL;
+import java.util.ResourceBundle;
+
+public class MainUIController implements Initializable {
+
+    @FXML
+    private Text clockText;
+    @FXML
+    private Button plus10Min, plus1Min, plus10Sec, plus1Sec, startButton, stopButton;
+
+    private Timer timer;
+    private Timeline tl;
+    private AudioClip finishMusic;
+
+    @Override
+    public void initialize(URL location, ResourceBundle resource) {
+        // 初期化時に音声ファイルを読み込み
+        finishMusic = new AudioClip(getClass().getResource(&quot;/music/finish.mp3&quot;).toString());
+
+        // 初期化時に3分を設定
+        timer = new Timer(3, 0);
+        clockText.setText(&quot;03:00&quot;);
+
+        // Timelineの初期化
+        Duration d = new Duration(1000);
+        KeyFrame kf = new KeyFrame(d, event -&gt; {
+            if(timer.second &gt; 0) {
+                timer.tick(-1);
+                clockText.setText( timer.toString() );
+            } else {
+                tl.stop();
+                finishMusic.play();
+            }
+        });
+        tl = new Timeline(kf);
+        tl.setCycleCount(Timeline.INDEFINITE);
+
+        // 10分増加ボタンが押されたときの動作
+        plus10Min.setOnAction(event -&gt; {
+            timer.tick(10*60);
+            clockText.setText( timer.toString() );
+        });
+
+        // 1分増加ボタンが押されたときの動作
+        plus1Min.setOnAction(event -&gt; {
+            timer.tick(1*60);
+            clockText.setText( timer.toString() );
+        });
+
+        // 10秒増加ボタンが押されたときの動作
+        plus10Sec.setOnAction(event -&gt; {
+            timer.tick(10);
+            clockText.setText( timer.toString() );
+        });
+
+        // 1秒増加ボタンが押されたときの動作
+        plus1Sec.setOnAction(event -&gt; {
+            timer.tick(1);
+            clockText.setText( timer.toString() );
+        });
+
+        // スタートボタンが押されたとき
+        startButton.setOnAction(event -&gt; {
+            tl.play();
+        });
+
+        // ストップボタンが押されたとき
+        stopButton.setOnAction(event -&gt; {
+            tl.stop();
+        });
+    }
+
+}</code></pre></div>
+
+<p><strong>(変更: 5, 22, 26, 27, 39~42行目)</strong></p>
+
+<p>また、Makefileを次のように編集してください。  </p>
+
+<div><pre class="line-numbers"><code class="language-none"># Makefile
+
+JAVAFX_PATH := JavaFXが配置されているパス
+JAVAFX_MODULES := javafx.controls,javafx.base,javafx.fxml,javafx.graphics,javafx.media,javafx.swing,javafx.web
+
+OPTS := -p $(JAVAFX_PATH)/lib --add-modules $(JAVAFX_MODULES)
+JAVA_OPTS := $(OPTS) -classpath bin
+JAVAC_OPTS := $(OPTS) -sourcepath src -d bin
+
+
+run:
+    cp -r src/fxml bin
+    cp -r src/music bin
+    java $(JAVA_OPTS) Main
+
+
+compile:
+    javac $(JAVAC_OPTS) src/Main.java</code></pre></div>
+
+<p><strong>(変更: 13行目)</strong></p>
+
+<p>AudioClip をプログラムで使用するために 5 行目で import 文を用いています。<br>
+また、音楽ファイルを使用するために 22 行目で AudioClip 変数の宣言と、26~27 行目でファイルの読み込みを行っています。<br>
+そして、タイマー終了時に再生を行うために 39~42 行目に if-else 文を追加しています。<br>
+3.4.6.では 0 秒でない時にタイマー継続という処理を行っていましたが、そうでないとき(=タイマーが終了したとき)には Timeline の定期処理をストップさせた後に AudioClip の再生を行っています。  </p>
+
+<p>正常に実装できている場合、タイマーの残り時間が 0 秒になると音楽が 1 度だけ再生されます。</p>
+
+<h2 id="toc_32">3.4.8. カウントダウン中に無限に音楽を再生する</h2>
+
+<p>タイマーの終了時だけではなく、カウントダウン中も音楽を再生するようにします。  </p>
+
+<p>まずは、使用する音楽ファイルのダウンロードを行います。<br>
+今回は以下のリンクで公開されている音楽を使用します。  </p>
+
+<p><a href="https://maoudamashii.jokersounds.com/music/game/mp3/game_maoudamashii_5_village10.mp3">魔王魂 BGM素材 村10</a></p>
+
+<p>ダウンロードした音楽ファイルは次のように配置してください。  </p>
+
+<div><pre class="line-numbers"><code class="language-none">.
+├── Makefile
+├── README.md
+├── bin
+│   ├── Clock.class
+│   ├── Main.class
+│   ├── MainUIController.class
+│   ├── Timer.class
+│   ├── fxml
+│   │   └── MainUI.fxml
+│   └── music
+│       ├── 1.mp3
+│       └── finish.mp3
+└── src
+    ├── Main.java
+    ├── MainUIController.java
+    ├── Timer.java
+    ├── fxml
+    │   └── MainUI.fxml
+    └── music
+        ├── finish.mp3
+        └── loop.mp3</code></pre></div>
+
+<p>次に、MainUIController.java を次のように編集してください。    </p>
+
+<div><pre class="line-numbers"><code class="language-java">import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
+import javafx.scene.text.Text;
+import javafx.scene.control.Button;
+import javafx.scene.media.AudioClip;
+import javafx.animation.Timeline;
+import javafx.animation.KeyFrame;
+import javafx.util.Duration;
+
+import java.net.URL;
+import java.util.ResourceBundle;
+
+public class MainUIController implements Initializable {
+
+    @FXML
+    private Text clockText;
+    @FXML
+    private Button plus10Min, plus1Min, plus10Sec, plus1Sec, startButton, stopButton;
+
+    private Timer timer;
+    private Timeline tl;
+    private AudioClip finishMusic, loopMusic;
+
+    @Override
+    public void initialize(URL location, ResourceBundle resource) {
+        // 初期化時に音声ファイルを読み込み
+        finishMusic = new AudioClip(getClass().getResource(&quot;/music/finish.mp3&quot;).toString());
+        loopMusic = new AudioClip(getClass().getResource(&quot;/music/loop.mp3&quot;).toString());
+        loopMusic.setCycleCount(AudioClip.INDEFINITE);
+
+        // 初期化時に3分を設定
+        timer = new Timer(3, 0);
+        clockText.setText(&quot;03:00&quot;);
+
+        // Timelineの初期化
+        Duration d = new Duration(1000);
+        KeyFrame kf = new KeyFrame(d, event -&gt; {
+            if(timer.second &gt; 0) {
+                timer.tick(-1);
+                clockText.setText( timer.toString() );
+            } else {
+                tl.stop();
+                loopMusic.stop();
+                finishMusic.play();
+            }
+        });
+        tl = new Timeline(kf);
+        tl.setCycleCount(Timeline.INDEFINITE);
+
+        // 10分増加ボタンが押されたときの動作
+        plus10Min.setOnAction(event -&gt; {
+            timer.tick(10*60);
+            clockText.setText( timer.toString() );
+        });
+
+        // 1分増加ボタンが押されたときの動作
+        plus1Min.setOnAction(event -&gt; {
+            timer.tick(1*60);
+            clockText.setText( timer.toString() );
+        });
+
+        // 10秒増加ボタンが押されたときの動作
+        plus10Sec.setOnAction(event -&gt; {
+            timer.tick(10);
+            clockText.setText( timer.toString() );
+        });
+
+        // 1秒増加ボタンが押されたときの動作
+        plus1Sec.setOnAction(event -&gt; {
+            timer.tick(1);
+            clockText.setText( timer.toString() );
+        });
+
+        // スタートボタンが押されたとき
+        startButton.setOnAction(event -&gt; {
+            tl.play();
+            loopMusic.play();
+        });
+
+        // ストップボタンが押されたとき
+        stopButton.setOnAction(event -&gt; {
+            tl.stop();
+            loopMusic.stop();
+        });
+    }
+
+}</code></pre></div>
+
+<p><strong>(変更: 22, 28, 29, 43, 77, 83行目)</strong></p>
+
+<p>22、28~29 行目では3.4.7.と同じようにして音楽ファイルの準備を行っています。<br>
+そして、「タイマーのストップ」「スタートボタンが押されたとき」「ストップボタンが押されたとき」の 3 箇所でそれぞれ音楽ファイルの制御を行っています。  </p>
+
+<p>正常に実装できている場合、スタートボタンを押すと音楽が流れ始め、ストップボタンを押すか残り時間が 0 秒になるまで音楽が無限に流れ続けます。  </p>
+
+<h2 id="toc_33"></h2>
 
 <p><em>最終更新 2021/02/06</em></p>
 
